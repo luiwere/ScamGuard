@@ -1,0 +1,36 @@
+{
+  "id": "legit_bank_verification",
+  "title": "Legitimate Bank Fraud Alert",
+  "description": "Legitimate automated notification from bank verifying a transaction without asking for secrets, emphasizing that reps never ask for codes.",
+  "category": "legitimate",
+  "steps": [
+    {
+      "delay_ms": 1500,
+      "text": "Hello, this is an automated security message from Chase Bank.",
+      "is_final": true,
+      "expected_risk": 0,
+      "expected_tactics": []
+    },
+    {
+      "delay_ms": 3000,
+      "text": "Did you attempt a transaction of $42.50 at Trader Joe's today?",
+      "is_final": true,
+      "expected_risk": 5,
+      "expected_tactics": []
+    },
+    {
+      "delay_ms": 3500,
+      "text": "If yes, press 1. If no, press 2. Remember, bank representatives will never ask you for your PIN or passcode over the phone.",
+      "is_final": true,
+      "expected_risk": 0,
+      "expected_tactics": ["Legitimate Bank Disclaimer"]
+    },
+    {
+      "delay_ms": 3000,
+      "text": "Thank you for confirming. Your card remains active and secure. Have a great day.",
+      "is_final": true,
+      "expected_risk": 0,
+      "expected_tactics": []
+    }
+  ]
+}

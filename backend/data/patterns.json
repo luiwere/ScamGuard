@@ -1,0 +1,67 @@
+{
+  "hard_flags": [
+    {
+      "id": "otp_request",
+      "name": "One-Time Passcode Request",
+      "regex": "(one[- ]time|verification|security|auth(entication)?)\\s+(code|passcode|pin|password|number)|(read\\s+back|tell\\s+me|enter|confirm)\\s+(the|your)?\\s*(\\d{6}|code|otp|passcode)",
+      "weight": 55,
+      "severity": "critical",
+      "advice": "Banks NEVER ask for your one-time SMS verification code over the phone. Hang up immediately."
+    },
+    {
+      "id": "pin_password_harvest",
+      "name": "PIN or Password Harvest",
+      "regex": "(tell\\s+me|read\\s+back|provide|confirm)\\s+(your|the)?\\s*(atm\\s+)?(pin|password|online\\s+banking\\s+password|security\\s+pin)",
+      "weight": 50,
+      "severity": "critical",
+      "advice": "Never reveal your ATM PIN or banking password to anyone."
+    },
+    {
+      "id": "remote_access_software",
+      "name": "Remote Access Software Installation",
+      "regex": "\\b(anydesk|teamviewer|quicksupport|ultraviewer|rustdesk|zoho\\s+assist|logmein|screen\\s+share|remote\\s+support)\\b",
+      "weight": 45,
+      "severity": "critical",
+      "advice": "Do not download software or grant screen control to an unsolicited caller."
+    },
+    {
+      "id": "gift_card_crypto_payment",
+      "name": "Unusual Payment Method",
+      "regex": "\\b(gift\\s*card|apple\\s+card|target\\s+card|google\\s+play|bitcoin\\s+atm|crypto|wire\\s+to\\s+a\\s+safe\\s+account|safe\\s+locker|federal\\s+reserve\\s+account)\\b",
+      "weight": 60,
+      "severity": "critical",
+      "advice": "No legitimate business or government agency demands payment via gift cards or Bitcoin ATMs."
+    }
+  ],
+  "soft_signals": [
+    {
+      "id": "urgency_coercion",
+      "name": "Artificial Urgency & Threat",
+      "regex": "(arrest\\s+warrant|law\\s+enforcement|suspended\\s+immediately|frozen\\s+within|do\\s+not\\s+hang\\s+up|legal\\s+action|sheriff|marshal)",
+      "weight": 20,
+      "severity": "warning"
+    },
+    {
+      "id": "secrecy_isolation",
+      "name": "Secrecy & Isolation",
+      "regex": "(do\\s+not\\s+tell\\s+anyone|keep\\s+this\\s+between\\s+us|stay\\s+on\\s+the\\s+line|don't\\s+talk\\s+to\\s+the\\s+teller|don't\\s+tell\\s+your\\s+family)",
+      "weight": 25,
+      "severity": "warning"
+    },
+    {
+      "id": "authority_impersonation",
+      "name": "Authority Claim",
+      "regex": "(fraud\\s+prevention\\s+department|social\\s+security\\s+administration|internal\\s+revenue\\s+service|irs|federal\\s+trade\\s+commission)",
+      "weight": 15,
+      "severity": "low"
+    }
+  ],
+  "dampeners": [
+    {
+      "id": "legit_bank_disclaimer",
+      "name": "Legitimate Bank Disclaimer",
+      "regex": "(never\\s+share\\s+this\\s+code|do\\s+not\\s+share\\s+this\\s+code\\s+with\\s+anyone|bank\\s+representatives\\s+will\\s+never\\s+ask|if\\s+you\\s+did\\s+not\\s+request)",
+      "weight": -40
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "scam_bank_fraud",
+  "title": "Bank Impersonation & OTP Theft",
+  "description": "Caller poses as Chase fraud department alerting to unauthorized charges, creating panic, and demanding a 6-digit SMS code.",
+  "category": "scam",
+  "steps": [
+    {
+      "delay_ms": 1500,
+      "text": "Hello, this is officer Miller from the Chase Bank Fraud Prevention Department calling regarding suspicious activity on your account.",
+      "is_final": true,
+      "expected_risk": 20,
+      "expected_tactics": ["Authority Claim"]
+    },
+    {
+      "delay_ms": 3000,
+      "text": "We detected an unauthorized charge of $1,849.00 originating from an IP address in Miami, Florida.",
+      "is_final": true,
+      "expected_risk": 35,
+      "expected_tactics": ["Artificial Urgency & Threat"]
+    },
+    {
+      "delay_ms": 3500,
+      "text": "To secure your account and block this fraudulent transaction, you must act right now. Do not hang up the phone or your funds will be permanently locked.",
+      "is_final": true,
+      "expected_risk": 55,
+      "expected_tactics": ["Artificial Urgency & Threat", "Secrecy & Isolation"]
+    },
+    {
+      "delay_ms": 4000,
+      "text": "I am generating a one-time security authorization passcode to your phone right now. Please read back the 6-digit passcode to verify your identity.",
+      "is_final": true,
+      "expected_risk": 90,
+      "expected_tactics": ["One-Time Passcode Request", "Credential Harvesting"]
+    }
+  ]
+}
