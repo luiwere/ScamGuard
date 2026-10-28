@@ -3,7 +3,7 @@
     {
       "id": "otp_request",
       "name": "One-Time Passcode Request",
-      "regex": "(one[- ]time|verification|security|auth(entication)?)\\s+(code|passcode|pin|password|number)|(read\\s+back|tell\\s+me|enter|confirm)\\s+(the|your)?\\s*(\\d{6}|code|otp|passcode)",
+      "regex": "(one[- ]time|verification|security|auth(entication)?).*?(code|passcode|pin|password|number)|(read\\s+back|tell\\s+me|enter|confirm|give\\s+me|provide|share).*?(code|otp|passcode|pin|6[- ]digit|\\b\\d{6}\\b)",
       "weight": 55,
       "severity": "critical",
       "advice": "Banks NEVER ask for your one-time SMS verification code over the phone. Hang up immediately."
