@@ -1,0 +1,36 @@
+{
+  "id": "scam_gift_card",
+  "title": "Tech Support & Gift Card Fraud",
+  "description": "Caller claims computer has dangerous malware, demands downloading AnyDesk, then demands payment via Target or Apple gift cards.",
+  "category": "scam",
+  "steps": [
+    {
+      "delay_ms": 1500,
+      "text": "Hello, this is the Windows Technical Support Division calling regarding urgent security breaches detected on your personal computer.",
+      "is_final": true,
+      "expected_risk": 15,
+      "expected_tactics": ["Authority Claim"]
+    },
+    {
+      "delay_ms": 3000,
+      "text": "Your system is actively broadcasting Trojan malware across the network. If we do not stop this immediately, law enforcement will suspend your internet service.",
+      "is_final": true,
+      "expected_risk": 40,
+      "expected_tactics": ["Artificial Urgency & Threat"]
+    },
+    {
+      "delay_ms": 3500,
+      "text": "Open your browser right now and install AnyDesk so our senior technician can take remote support access and clean your files.",
+      "is_final": true,
+      "expected_risk": 65,
+      "expected_tactics": ["Remote Access Software Installation"]
+    },
+    {
+      "delay_ms": 4000,
+      "text": "To renew your security license and avoid arrest, you must go to Target right now and purchase a $400 Target gift card or Apple card.",
+      "is_final": true,
+      "expected_risk": 95,
+      "expected_tactics": ["Unusual Payment Method", "Artificial Urgency & Threat"]
+    }
+  ]
+}

@@ -22,6 +22,7 @@ from app.services.rules import rules_engine
 from app.services.stt import stt_service
 from app.services.llm import llm_judge
 from app.services.scoring import RiskScoringEngine
+from app.services.alerts import alerts_service
 
 logger = logging.getLogger("scamguard.ws")
 router = APIRouter()
@@ -144,8 +145,20 @@ class CallSession:
 
         # 6. Check for Critical Alert Trigger
         if self.scoring_engine.should_trigger_alert():
-            alert_event = self.scoring_engine.create_alert_event(contact_notified=False)
-            logger.warning(f"🚨 CRITICAL ALERT TRIGGERED: {alert_event.advice}")
+            contact_name = self.contact.name if self.contact and self.contact.name else "User"
+            chat_id = self.contact.telegram_chat_id if self.contact else None
+            tactic_names = [t.name for t in self.all_detected_tactics]
+
+            notified = await alerts_service.send_alert(
+                contact_name=contact_name,
+                chat_id=chat_id,
+                score=self.scoring_engine.score,
+                tactics=tactic_names,
+                advice=self.scoring_engine.last_advice
+            )
+
+            alert_event = self.scoring_engine.create_alert_event(contact_notified=notified)
+            logger.warning(f"🚨 CRITICAL ALERT TRIGGERED: {alert_event.advice} (Telegram notified: {notified})")
             await self.send_event(alert_event)
 
     async def handle_audio_chunk(self, data: bytes):
