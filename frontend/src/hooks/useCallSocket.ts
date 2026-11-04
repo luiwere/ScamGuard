@@ -18,9 +18,15 @@ interface UseCallSocketOptions {
 
 export function useCallSocket(options: UseCallSocketOptions = {}) {
   const wsUrl = options.wsUrl || (
-    window.location.protocol === 'https:'
-      ? `wss://${window.location.hostname}:8000/ws/call`
-      : `ws://${window.location.hostname}:8000/ws/call`
+    import.meta.env.VITE_WS_URL || (
+      window.location.port === '5173' || window.location.port === '3000'
+        ? (window.location.protocol === 'https:'
+            ? `wss://${window.location.hostname}:8000/ws/call`
+            : `ws://${window.location.hostname}:8000/ws/call`)
+        : (window.location.protocol === 'https:'
+            ? `wss://${window.location.host}/ws/call`
+            : `ws://${window.location.host}/ws/call`)
+    )
   );
 
   const [status, setStatus] = useState<SocketStatus>('disconnected');

@@ -97,9 +97,22 @@ Deploy ScamGuard onto Modal serverless infrastructure with one command:
 modal deploy backend/modal_app.py
 ```
 
-Or deploy with Docker:
+## 🐳 Docker Deployment
+
+### Production Stack (FastAPI + Nginx Reverse Proxy)
+Build and run the production containers:
 ```bash
+docker-compose up --build
+# Or with Docker Compose V2:
 docker compose up --build
+```
+- **Web App & WebSocket**: [http://localhost](http://localhost) (or [http://localhost:5173](http://localhost:5173))
+- **Backend API**: [http://localhost:8000](http://localhost:8000)
+
+### Development Stack (Hot-Reloading)
+Run with live code mounts for development:
+```bash
+docker-compose -f docker-compose.dev.yml up --build
 ```
 
 ---

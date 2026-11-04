@@ -45,7 +45,12 @@ export default function App() {
 
   // Fetch scenarios from backend
   useEffect(() => {
-    fetch('http://localhost:8000/api/scenarios')
+    const apiUrl = import.meta.env.VITE_API_URL || (
+      window.location.port === '5173' || window.location.port === '3000'
+        ? `http://${window.location.hostname}:8000/api/scenarios`
+        : '/api/scenarios'
+    );
+    fetch(apiUrl)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setScenarios(data))
       .catch((err) => console.log('Scenarios fetch error (backend may still be booting):', err));
