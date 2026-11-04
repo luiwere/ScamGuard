@@ -77,3 +77,19 @@ def test_scenarios_validity():
             data = json.load(fp)
             scenario = Scenario(**data)
             assert len(scenario.steps) > 0
+
+
+def test_cors_origins_various_inputs():
+    from app.config import Settings
+    # Wildcard string
+    s1 = Settings(CORS_ORIGINS="*")
+    assert s1.CORS_ORIGINS == ["*"]
+
+    # Comma-separated string
+    s2 = Settings(CORS_ORIGINS="http://localhost:5173, https://mysite.com")
+    assert s2.CORS_ORIGINS == ["http://localhost:5173", "https://mysite.com"]
+
+    # JSON array string
+    s3 = Settings(CORS_ORIGINS='["http://localhost:3000"]')
+    assert s3.CORS_ORIGINS == ["http://localhost:3000"]
+
