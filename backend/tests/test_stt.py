@@ -26,3 +26,15 @@ async def test_stt_graceful_fallback_without_key():
     pcm_data = b"\x00\x00" * 8000
     result = await service.transcribe_pcm(pcm_data)
     assert result is None  # Should cleanly return None without crashing
+
+
+def test_stt_groq_auto_detection():
+    service = SpeechToTextService(api_key="gsk_test123456789")
+    assert service.audio_url == "https://api.groq.com/openai/v1/audio/transcriptions"
+    assert service.model == "whisper-large-v3-turbo"
+
+
+def test_stt_fireworks_auto_detection():
+    service = SpeechToTextService(api_key="fw_test123456789")
+    assert service.audio_url == "https://api.fireworks.ai/inference/v1/audio/transcriptions"
+    assert "whisper-v3-turbo" in service.model

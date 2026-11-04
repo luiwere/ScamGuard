@@ -17,6 +17,7 @@ Render Blueprints allow you to provision both the **FastAPI Backend** and the **
    - `scamguard-backend` (Web Service / Python)
    - `scamguard-frontend` (Static Site / Node)
 6. Under **Environment Variables**, fill in your secret keys:
+   - `GROQ_API_KEY`: Your Groq API Key (starts with `gsk_`, e.g. from groq.com) **OR**
    - `FIREWORKS_API_KEY`: Your Fireworks API Key (from fireworks.ai)
    - `TELEGRAM_BOT_TOKEN`: (Optional) Your Telegram bot token
    - `TELEGRAM_DEFAULT_CHAT_ID`: (Optional) Your default Telegram chat ID
@@ -43,9 +44,9 @@ If you prefer configuring services manually in the Render UI:
 4. Add Environment Variables:
    - `PYTHON_VERSION`: `3.12.3`
    - `CORS_ORIGINS`: `*`
-   - `FIREWORKS_API_KEY`: `<your_key>`
-   - `FIREWORKS_STT_MODEL`: `whisper-v3-turbo`
-   - `FIREWORKS_LLM_MODEL`: `accounts/fireworks/models/llama-v3p3-70b-instruct`
+   - `GROQ_API_KEY`: `<your_groq_key>` (or `FIREWORKS_API_KEY`: `<your_fireworks_key>`)
+   - `GROQ_STT_MODEL`: `whisper-large-v3-turbo`
+   - `GROQ_LLM_MODEL`: `llama-3.3-70b-versatile`
    - `TELEGRAM_BOT_TOKEN`: `<your_bot_token>`
    - `TELEGRAM_DEFAULT_CHAT_ID`: `<your_chat_id>`
 5. Click **Create Web Service** and note your backend URL (e.g., `https://scamguard-backend.onrender.com`).

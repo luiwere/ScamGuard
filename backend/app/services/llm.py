@@ -8,7 +8,9 @@ from app.models.schemas import TacticItem
 
 logger = logging.getLogger("scamguard.llm")
 
-FIREWORKS_CHAT_URL = "https://api.fireworks.ai/inference/v1/chat/completions"
+DEFAULT_FIREWORKS_CHAT_URL = "https://api.fireworks.ai/inference/v1/chat/completions"
+DEFAULT_GROQ_CHAT_URL = "https://api.groq.com/openai/v1/chat/completions"
+FIREWORKS_CHAT_URL = DEFAULT_FIREWORKS_CHAT_URL
 
 SYSTEM_PROMPT = """You are the ScamGuard Real-Time Intent Judge.
 Your job is to analyze live transcripts of incoming phone calls to protect vulnerable people from scams, fraud, and social engineering in real time.
@@ -48,12 +50,44 @@ class LLMJudgeResult:
 
 
 class LLMJudgeService:
-    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
-        self.api_key = api_key or settings.FIREWORKS_API_KEY
-        self.model = model or settings.FIREWORKS_LLM_MODEL
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
+        chat_url: Optional[str] = None,
+    ):
+        self._custom_api_key = api_key
+        self._custom_model = model
+        self._custom_chat_url = chat_url
         # Short timeout for real-time responsiveness (1.5s circuit breaker)
         self.timeout = 1.5
         self._client: Optional[httpx.AsyncClient] = None
+
+    @property
+    def api_key(self) -> str:
+        if self._custom_api_key is not None:
+            return self._custom_api_key
+        return settings.active_api_key
+
+    @property
+    def model(self) -> str:
+        if self._custom_model is not None:
+            return self._custom_model
+        if self.api_key:
+            if self.api_key.startswith("gsk_"):
+                return settings.GROQ_LLM_MODEL or "llama-3.3-70b-versatile"
+            return settings.FIREWORKS_LLM_MODEL
+        return settings.active_llm_model
+
+    @property
+    def chat_url(self) -> str:
+        if self._custom_chat_url is not None:
+            return self._custom_chat_url
+        if self.api_key:
+            if self.api_key.startswith("gsk_"):
+                return DEFAULT_GROQ_CHAT_URL
+            return DEFAULT_FIREWORKS_CHAT_URL
+        return settings.chat_url
 
     async def get_client(self) -> httpx.AsyncClient:
         if self._client is None or self._client.is_closed:
@@ -74,7 +108,7 @@ class LLMJudgeService:
             return result
 
         if not self.api_key or self.api_key.startswith("your_"):
-            logger.debug("No Fireworks API key configured; skipping LLM judge.")
+            logger.debug("No active AI API key configured; skipping LLM judge.")
             return result
 
         client = await self.get_client()
@@ -99,7 +133,7 @@ class LLMJudgeService:
 
         try:
             response = await client.post(
-                FIREWORKS_CHAT_URL,
+                self.chat_url,
                 headers=headers,
                 json=payload
             )
@@ -127,12 +161,12 @@ class LLMJudgeService:
                 )
             else:
                 logger.warning(
-                    f"Fireworks LLM returned status {response.status_code}: {response.text}"
+                    f"AI LLM ({self.chat_url}) returned status {response.status_code}: {response.text}"
                 )
         except httpx.TimeoutException:
-            logger.warning(f"Fireworks LLM timed out after {self.timeout}s (circuit breaker tripped).")
+            logger.warning(f"AI LLM timed out after {self.timeout}s (circuit breaker tripped).")
         except Exception as e:
-            logger.error(f"Fireworks LLM evaluation error: {e}")
+            logger.error(f"AI LLM evaluation error: {e}")
 
         return result
 

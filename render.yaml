@@ -33,6 +33,12 @@ services:
         value: accounts/fireworks/models/llama-v3p3-70b-instruct
       - key: FIREWORKS_API_KEY
         sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_STT_MODEL
+        value: whisper-large-v3-turbo
+      - key: GROQ_LLM_MODEL
+        value: llama-3.3-70b-versatile
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: TELEGRAM_DEFAULT_CHAT_ID
