@@ -19,13 +19,20 @@ interface UseCallSocketOptions {
 export function useCallSocket(options: UseCallSocketOptions = {}) {
   const wsUrl = options.wsUrl || (
     import.meta.env.VITE_WS_URL || (
-      window.location.port === '5173' || window.location.port === '3000'
-        ? (window.location.protocol === 'https:'
-            ? `wss://${window.location.hostname}:8000/ws/call`
-            : `ws://${window.location.hostname}:8000/ws/call`)
-        : (window.location.protocol === 'https:'
-            ? `wss://${window.location.host}/ws/call`
-            : `ws://${window.location.host}/ws/call`)
+      import.meta.env.VITE_API_URL
+        ? (() => {
+            const raw = import.meta.env.VITE_API_URL.replace(/\/+$/, '').replace(/\/api(\/scenarios)?$/, '');
+            const wsProto = raw.startsWith('https:') ? 'wss:' : 'ws:';
+            const hostPart = raw.replace(/^https?:\/\//, '');
+            return `${wsProto}//${hostPart}/ws/call`;
+          })()
+        : (window.location.port === '5173' || window.location.port === '3000'
+            ? (window.location.protocol === 'https:'
+                ? `wss://${window.location.hostname}:8000/ws/call`
+                : `ws://${window.location.hostname}:8000/ws/call`)
+            : (window.location.protocol === 'https:'
+                ? `wss://${window.location.host}/ws/call`
+                : `ws://${window.location.host}/ws/call`))
     )
   );
 

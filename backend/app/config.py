@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List
+from pydantic import field_validator
+from typing import List, Any
+import json
 
 
 class Settings(BaseSettings):
@@ -11,6 +13,25 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5173",
         "http://localhost:3000",
     ]
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> List[str]:
+        if isinstance(v, str):
+            v_trimmed = v.strip()
+            if v_trimmed.startswith("[") and v_trimmed.endswith("]"):
+                try:
+                    return json.loads(v_trimmed)
+                except Exception:
+                    pass
+            if "," in v_trimmed:
+                return [i.strip() for i in v_trimmed.split(",") if i.strip()]
+            if v_trimmed == "*":
+                return ["*"]
+            return [v_trimmed]
+        elif isinstance(v, list):
+            return v
+        return ["*"]
 
     # Fireworks AI
     FIREWORKS_API_KEY: str = ""

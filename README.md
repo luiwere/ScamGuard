@@ -90,8 +90,16 @@ cd frontend && npm run build
 
 ---
 
-## ☁️ Cloud Deployment (Modal)
+## 🌐 Cloud Deployment
 
+### 1. Render (render.com) — One-Click Blueprint
+Deploy the full stack (FastAPI backend + React frontend) automatically via Render Blueprints:
+1. Push your repository to GitHub / GitLab.
+2. Go to [Render Dashboard](https://dashboard.render.com) $\rightarrow$ **New +** $\rightarrow$ **Blueprint**.
+3. Select this repo — Render will automatically read [`render.yaml`](./render.yaml) and provision both services.
+4. See full instructions in [Render Deployment Guide](./docs/RENDER_DEPLOYMENT.md).
+
+### 2. Modal (Serverless GPU/Container)
 Deploy ScamGuard onto Modal serverless infrastructure with one command:
 ```bash
 modal deploy backend/modal_app.py

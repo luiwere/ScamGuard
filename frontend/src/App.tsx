@@ -45,11 +45,14 @@ export default function App() {
 
   // Fetch scenarios from backend
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || (
-      window.location.port === '5173' || window.location.port === '3000'
-        ? `http://${window.location.hostname}:8000/api/scenarios`
-        : '/api/scenarios'
-    );
+    let apiUrl = '/api/scenarios';
+    if (import.meta.env.VITE_API_URL) {
+      const base = import.meta.env.VITE_API_URL.replace(/\/+$/, '');
+      apiUrl = base.endsWith('/api/scenarios') ? base : `${base}/api/scenarios`;
+    } else if (window.location.port === '5173' || window.location.port === '3000') {
+      apiUrl = `http://${window.location.hostname}:8000/api/scenarios`;
+    }
+
     fetch(apiUrl)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => setScenarios(data))
