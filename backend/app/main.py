@@ -60,3 +60,11 @@ async def get_scenarios():
             except Exception as e:
                 logger.error(f"Error loading scenario {file}: {e}")
     return scenarios
+
+
+# Mount static frontend build if present (for single-container production deployment)
+static_dir = Path(__file__).resolve().parent.parent / "static"
+if static_dir.exists():
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
+
